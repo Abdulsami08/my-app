@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { simplifiedProduct } from "../interface";
-import { client } from "../../../sanity/lib/client";
+import { client } from "../../../sanity/lib/client"
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
-import SeeAll from "./SeeAll"
+
 async function getData() {
-  const query = `*[_type == "product"][0...4] |order(_createdAt desc)  {
+  const query = `*[_type == "product"][0...4] | order(_createdAt desc) {
         _id,
           price,
         name,
@@ -14,9 +14,7 @@ async function getData() {
           "imageUrl": images[0].asset->url
       }`;
 
-  const data = await client.fetch(query,{
-    cache:"no-store"
-  });
+  const data = await client.fetch(query);
 
   return data;
 }
@@ -32,8 +30,8 @@ export default async function Newest() {
             Our Newest products
           </h2>
 
-          <Link className="text-primary flex items-center gap-x-1" href="/SeeAll">
-            See All{""}
+          <Link className="text-primary flex items-center gap-x-1" href="/all">
+            See All{" "}
             <span>
               <ArrowRight />
             </span>
@@ -44,7 +42,6 @@ export default async function Newest() {
           {data.map((product) => (
             <div key={product._id} className="group relative">
               <div className="aspect-square w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:h-80">
-              <Link href={`/product/${product.slug}`}>
                 <Image
                   src={product.imageUrl}
                   alt="Product image"
@@ -52,7 +49,6 @@ export default async function Newest() {
                   width={300}
                   height={300}
                 />
-                </Link>
               </div>
 
               <div className="mt-4 flex justify-between">
